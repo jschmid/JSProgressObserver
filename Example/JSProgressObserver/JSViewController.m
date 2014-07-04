@@ -29,8 +29,7 @@
 - (void)launchProgress {
   self.progress = [NSProgress progressWithTotalUnitCount:100];
 
-  obs = [[JSProgressObserver alloc] initWithProgressView:self.progressView
-                                                progress:self.progress];
+  [self.progressView observeProgress:self.progress];
 
   dispatch_async(
       dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{

@@ -17,3 +17,7 @@
                             progress:(NSProgress *)progress;
 
 @end
+
+@interface UIProgressView (JSProgressObserver)
+- (void)observeProgress:(NSProgress *)progress;
+@end

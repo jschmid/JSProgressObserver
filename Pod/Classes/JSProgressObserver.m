@@ -8,6 +8,8 @@
 
 #import "JSProgressObserver.h"
 
+#import <objc/runtime.h>
+
 void *observerContext = &observerContext;
 
 @implementation JSProgressObserver
@@ -50,6 +52,24 @@ void *observerContext = &observerContext;
                            change:change
                           context:context];
   }
+}
+
+@end
+
+static void *ProgressViewObserverKey;
+@implementation UIProgressView (JSProgressObserver)
+
+- (void)observeProgress:(NSProgress *)progress {
+  JSProgressObserver *obs =
+      [[JSProgressObserver alloc] initWithProgressView:self progress:progress];
+
+  objc_setAssociatedObject(self, &ProgressViewObserverKey, obs,
+                           OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (void)dealloc {
+  objc_setAssociatedObject(self, &ProgressViewObserverKey, nil,
+                           OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 @end
