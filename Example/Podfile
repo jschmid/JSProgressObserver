@@ -1,0 +1,9 @@
+target 'JSProgressObserver', :exclusive => true do
+  pod "JSProgressObserver", :path => "../"
+end
+
+target 'Tests', :exclusive => true do
+  pod "JSProgressObserver", :path => "../"
+
+  pod 'Kiwi/XCTest'
+end
