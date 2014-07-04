@@ -8,22 +8,37 @@
 
 #import "JSViewController.h"
 
-@interface JSViewController ()
+#import "JSProgressObserver.h"
 
+@interface JSViewController ()
+@property(weak, nonatomic) IBOutlet UIProgressView *progressView;
+
+@property NSProgress *progress;
 @end
 
-@implementation JSViewController
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
+@implementation JSViewController {
+  JSProgressObserver *obs;
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)viewDidLoad {
+  [super viewDidLoad];
+
+  [self launchProgress];
+}
+
+- (void)launchProgress {
+  self.progress = [NSProgress progressWithTotalUnitCount:100];
+
+  obs = [[JSProgressObserver alloc] initWithProgressView:self.progressView
+                                                progress:self.progress];
+
+  dispatch_async(
+      dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+          for (int i = 0; i < 100; ++i) {
+            self.progress.completedUnitCount++;
+            [NSThread sleepForTimeInterval:1];
+          }
+      });
 }
 
 @end
